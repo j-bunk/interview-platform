@@ -38,9 +38,9 @@ export class Answer extends BaseEntity {
   @Column()
   wpm: number;
 
-  @Column()
+  @Column('varchar', { array: true })
   repeatedWords: string[];
 
-  @Column()
+  @Column('varchar', { array: true })
   fillerWords: string[];
 }
