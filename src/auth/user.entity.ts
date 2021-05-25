@@ -1,24 +1,26 @@
 import {
   BaseEntity,
-  Column,
   Entity,
-  OneToMany,
   PrimaryGeneratedColumn,
+  Column,
+  Unique,
+  OneToMany,
 } from 'typeorm';
 
 import { Answer } from '../answers/answer.entity';
 
 @Entity()
-export class Question extends BaseEntity {
+@Unique(['username'])
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  questionText: string;
+  username: string;
 
   @Column()
-  sampleAnswer: string;
+  password: string;
 
-  @OneToMany(() => Answer, (answer) => answer.question)
+  @OneToMany(() => Answer, (answer) => answer.user, { eager: true })
   answer: Answer[];
 }

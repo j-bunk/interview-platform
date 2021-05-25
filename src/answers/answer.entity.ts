@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
+import { User } from '../auth/user.entity';
 import { Question } from '../questions/question.entity';
 
 @Entity()
@@ -43,4 +44,10 @@ export class Answer extends BaseEntity {
 
   @Column('varchar', { array: true })
   fillerWords: string[];
+
+  @ManyToOne(() => User, (user) => user.answer, { eager: false })
+  user: User;
+
+  @Column()
+  userId: number;
 }
