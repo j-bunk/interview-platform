@@ -9,8 +9,6 @@ import {
   Patch,
   Post,
   UseGuards,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -35,7 +33,6 @@ export class AnswersController {
   }
 
   @Patch('/:id/answer')
-  @UsePipes(ValidationPipe)
   updateAnswer(
     @Param('id', ParseIntPipe) id: number,
     @Body() answerDto: AnswerDto,
@@ -45,7 +42,6 @@ export class AnswersController {
   }
 
   @Post('/:questionid')
-  @UsePipes(ValidationPipe)
   createAnswer(
     @Param('questionid', ParseIntPipe) questionId: number,
     @Body() answerDto: AnswerDto,

@@ -1,7 +1,7 @@
 import { InternalServerErrorException, Logger } from '@nestjs/common';
-import { User } from 'src/auth/user.entity';
 import { Repository, EntityRepository } from 'typeorm';
 
+import { User } from '../auth/user.entity';
 import { Answer } from './answer.entity';
 import { AnswerDto } from './dto/answer.dto';
 
