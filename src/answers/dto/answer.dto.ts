@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import {
   IsArray,
   IsInt,
@@ -14,14 +15,17 @@ export class AnswerDto {
 
   @IsNotEmpty()
   @IsInt()
+  @Transform(({ value }) => Number.parseInt(value))
   totalWords: number;
 
   @IsNotEmpty()
   @IsNumber()
+  @Transform(({ value }) => Number.parseInt(value))
   time: number;
 
   @IsNotEmpty()
   @IsNumber()
+  @Transform(({ value }) => Number.parseInt(value))
   wpm: number;
 
   @IsOptional()

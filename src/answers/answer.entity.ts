@@ -39,10 +39,10 @@ export class Answer extends BaseEntity {
   @Column()
   wpm: number;
 
-  @Column('varchar', { array: true })
+  @Column('varchar', { array: true, nullable: true })
   repeatedWords: string[];
 
-  @Column('varchar', { array: true })
+  @Column('varchar', { array: true, nullable: true })
   fillerWords: string[];
 
   @ManyToOne(() => User, (user) => user.answer, { eager: false })

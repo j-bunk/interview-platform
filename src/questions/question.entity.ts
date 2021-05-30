@@ -19,6 +19,6 @@ export class Question extends BaseEntity {
   @Column()
   sampleAnswer: string;
 
-  @OneToMany(() => Answer, (answer) => answer.question)
+  @OneToMany(() => Answer, (answer) => answer.question, { eager: false })
   answer: Answer[];
 }

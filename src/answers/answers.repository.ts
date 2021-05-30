@@ -1,4 +1,5 @@
 import { InternalServerErrorException, Logger } from '@nestjs/common';
+import { User } from 'src/auth/user.entity';
 import { Repository, EntityRepository } from 'typeorm';
 
 import { Answer } from './answer.entity';
@@ -10,24 +11,29 @@ export class AnswerRepository extends Repository<Answer> {
   async createAnswer(
     questionId: number,
     answerDto: AnswerDto,
+    user: User,
   ): Promise<Answer> {
     const { answerText, totalWords, wpm, time, repeatedWords, fillerWords } =
       answerDto;
 
-    const answer: Answer = new Answer();
-    answer.questionId = questionId;
-    answer.answerText = answerText;
-    answer.totalWords = totalWords;
-    answer.wpm = wpm;
-    answer.time = time;
-    answer.repeatedWords = repeatedWords;
-    answer.fillerWords = fillerWords;
+    const answer = this.create({
+      questionId,
+      answerText,
+      totalWords,
+      wpm,
+      time,
+      repeatedWords,
+      fillerWords,
+      user,
+    });
 
     try {
       await this.save(answer);
     } catch (error) {
       this.logger.error(
-        `Failed to create answer, answer details: ${JSON.stringify(answerDto)}`,
+        `Failed to create answer for user ${
+          user.username
+        }, answer details: ${JSON.stringify(answerDto)}`,
         error.stack,
       );
       throw new InternalServerErrorException();
