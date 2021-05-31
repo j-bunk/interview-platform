@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AuthModule } from '../auth/auth.module';
@@ -8,7 +9,11 @@ import { AnswerRepository } from './answers.repository';
 import { AnswersService } from './answers.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([AnswerRepository]), AuthModule],
+  imports: [
+    TypeOrmModule.forFeature([AnswerRepository]),
+    AuthModule,
+    ConfigModule,
+  ],
   controllers: [AnswersController],
   providers: [AnswersService, AnswerAnalysisService],
 })

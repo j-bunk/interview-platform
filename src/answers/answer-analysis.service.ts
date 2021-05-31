@@ -1,4 +1,5 @@
 import { Injectable, ServiceUnavailableException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
 import { IamAuthenticator } from 'ibm-watson/auth';
 import * as mp3Duration from 'mp3-duration';
@@ -10,6 +11,8 @@ import { Answer } from './answer.entity';
 
 @Injectable()
 export class AnswerAnalysisService {
+  constructor(private configService: ConfigService) {}
+
   async audioAnalysis(audioFilePath: string): Promise<Answer> {
     const answer = new Answer();
 
@@ -41,10 +44,9 @@ export class AnswerAnalysisService {
   private async transcribeAudio(audioFilePath: string): Promise<string> {
     const speechToText = new SpeechToTextV1({
       authenticator: new IamAuthenticator({
-        apikey: 'nghqb0v6sPfo3n5TX9dPvB9XHyV7c2CafrOpFgGCIomA',
+        apikey: this.configService.get('API_KEY'),
       }),
-      serviceUrl:
-        'https://api.us-south.speech-to-text.watson.cloud.ibm.com/instances/ebdb9470-0a7a-4be1-9760-176339e08f2c',
+      serviceUrl: this.configService.get('SERVICE_URL'),
     });
 
     const params = {
