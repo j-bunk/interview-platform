@@ -9,36 +9,26 @@ import { AnswerDto } from './dto/answer.dto';
 export class AnswerRepository extends Repository<Answer> {
   private logger = new Logger('Answer Repository');
   async createAnswer(
+    answer: Answer,
+    audioFilePath: string,
     questionId: number,
-    answerDto: AnswerDto,
     user: User,
   ): Promise<Answer> {
-    const { answerText, totalWords, wpm, time, repeatedWords, fillerWords } =
-      answerDto;
-
-    const answer = this.create({
-      questionId,
-      answerText,
-      totalWords,
-      wpm,
-      time,
-      repeatedWords,
-      fillerWords,
-      user,
-    });
+    answer.user = user;
+    answer.questionId = questionId;
+    answer.audioFilePath = audioFilePath;
 
     try {
       await this.save(answer);
     } catch (error) {
       this.logger.error(
-        `Failed to create answer for user ${
-          user.username
-        }, answer details: ${JSON.stringify(answerDto)}`,
+        `Failed to create answer for user ${user.username}, error details:`,
         error.stack,
       );
       throw new InternalServerErrorException();
     }
 
+    delete answer.user;
     return answer;
   }
 

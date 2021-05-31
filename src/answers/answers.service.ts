@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../auth/user.entity';
 import { Answer } from './answer.entity';
 import { AnswerRepository } from './answers.repository';
+import { AnswerAnalysisService } from './answer-analysis.service';
 import { AnswerDto } from './dto/answer.dto';
 
 @Injectable()
@@ -11,6 +12,7 @@ export class AnswersService {
   constructor(
     @InjectRepository(AnswerRepository)
     private answerRepository: AnswerRepository,
+    private answerAnalysisService: AnswerAnalysisService,
   ) {}
 
   async getAnswerById(id: number, user: User): Promise<Answer> {
@@ -44,10 +46,19 @@ export class AnswersService {
   }
 
   async createAnswer(
+    audioFilePath: string,
     questionId: number,
-    answerDto: AnswerDto,
     user: User,
   ): Promise<Answer> {
-    return this.answerRepository.createAnswer(questionId, answerDto, user);
+    const answer = await this.answerAnalysisService.audioAnalysis(
+      audioFilePath,
+    );
+
+    return this.answerRepository.createAnswer(
+      answer,
+      audioFilePath,
+      questionId,
+      user,
+    );
   }
 }

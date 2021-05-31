@@ -50,4 +50,7 @@ export class Answer extends BaseEntity {
 
   @Column()
   userId: number;
+
+  @Column({ nullable: true })
+  audioFilePath: string;
 }
