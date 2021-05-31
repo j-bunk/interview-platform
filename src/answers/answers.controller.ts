@@ -1,13 +1,12 @@
 import {
-  Body,
   Controller,
   Delete,
   Get,
   Logger,
   Param,
   ParseIntPipe,
-  Patch,
   Post,
+  Res,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -22,7 +21,6 @@ import { GetUser } from '../auth/get-user.decorator';
 import { User } from '../auth/user.entity';
 import { Answer } from './answer.entity';
 import { AnswersService } from './answers.service';
-import { AnswerDto } from './dto/answer.dto';
 
 export const storage = {
   storage: diskStorage({
@@ -51,13 +49,22 @@ export class AnswersController {
     return this.answersService.getAnswerById(id, user);
   }
 
-  @Patch('/:id/answer')
-  updateAnswer(
+  @Get('/audio/:id')
+  async getAudioByAnswerId(
     @Param('id', ParseIntPipe) id: number,
-    @Body() answerDto: AnswerDto,
     @GetUser() user: User,
+    @Res() res,
   ): Promise<Answer> {
-    return this.answersService.updateAnswer(id, answerDto, user);
+    this.logger.verbose(
+      `User "${user.username}" retrieving audio for answer #${id}`,
+    );
+
+    return res.sendFile(
+      path.join(
+        process.cwd(),
+        await this.answersService.getAudioByAnswerId(id, user),
+      ),
+    );
   }
 
   @Post('/upload/:questionid')
@@ -71,7 +78,7 @@ export class AnswersController {
   }
 
   @Delete('/:id')
-  deleteTaskById(
+  async deleteAnswerById(
     @Param('id', ParseIntPipe) id: number,
     @GetUser() user: User,
   ): Promise<void> {
