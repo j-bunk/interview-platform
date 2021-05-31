@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { CreateQuestionDto } from './create-question.dto';
+import { CreateQuestionDto } from './dtos/create-question.dto';
 import { Question } from './question.entity';
 import { QuestionRepository } from './question.repository';
 

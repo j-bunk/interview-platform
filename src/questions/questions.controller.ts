@@ -11,7 +11,7 @@ import { ApiConsumes, ApiTags } from '@nestjs/swagger';
 
 import { QuestionsService } from './questions.service';
 import { Question } from './question.entity';
-import { CreateQuestionDto } from './create-question.dto';
+import { CreateQuestionDto } from './dtos/create-question.dto';
 
 @ApiTags('questions')
 @Controller('questions')
