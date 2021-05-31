@@ -16,11 +16,13 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import * as path from 'path';
+import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
 
 import { GetUser } from '../auth/get-user.decorator';
 import { User } from '../auth/user.entity';
 import { Answer } from './answer.entity';
 import { AnswersService } from './answers.service';
+import { ApiFile } from './decorators/api-file.decorator';
 
 export const storage = {
   storage: diskStorage({
@@ -35,6 +37,8 @@ export const storage = {
   }),
 };
 
+@ApiTags('answers')
+@ApiBearerAuth()
 @Controller('answers')
 @UseGuards(AuthGuard())
 export class AnswersController {
@@ -68,6 +72,8 @@ export class AnswersController {
   }
 
   @Post('/upload/:questionid')
+  @ApiConsumes('multipart/form-data')
+  @ApiFile('audio')
   @UseInterceptors(FileInterceptor('audio', storage))
   createAnswer(
     @Param('questionid', ParseIntPipe) questionId: number,
